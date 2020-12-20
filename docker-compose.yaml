@@ -1,0 +1,26 @@
+version: '2'
+services:
+  redis:
+    image: redis
+    expose: 
+      - "6379"
+    container_name: "redis"
+  mysql:
+    image: registry.cn-hangzhou.aliyuncs.com/tlntin/davinci_mysql
+    expose: 
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_root  # If you change the password, please synch change the config/application.yaml  MySQL password under file in docker davinci 
+    container_name: "mysql"
+  davinci:
+    image: registry.cn-hangzhou.aliyuncs.com/tlntin/davinci_davinci
+    depends_on:
+      - mysql
+      - redis
+    stdin_open: true # just as -i in docker exec/run
+    tty: true  # just as -t in docker exec/run
+    expose: 
+      - "8080"
+    ports: 
+      - "8080:8080"
+    container_name: "davinci"
